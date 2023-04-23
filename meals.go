@@ -10,6 +10,11 @@ import (
 
 const apiKey string = "ba78847855ab4d6896c72ae7d7f3da39"
 
+func generateMeals() {
+	ingredients, numberOfRecipes := cmd.Execute()
+	showRecipes(ingredients, numberOfRecipes)
+}
+
 type Ingredient struct {
 	Id     int     `json: "id"`
 	Amount float32 `json: "amount"`
@@ -33,11 +38,6 @@ type Nutrition struct {
 	Calories string `json: "calories"`
 	Carbs    string `json: "carbs"`
 	Protein  string `json: "protein"`
-}
-
-func generateMeals() {
-	ingredients, numberOfRecipes := cmd.Execute()
-	showRecipes(ingredients, numberOfRecipes)
 }
 
 func showRecipes(ingredients string, numberOfRecipes int) {

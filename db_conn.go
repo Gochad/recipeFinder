@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var uri string = "mongodb+srv://gocha:z7xOvo0Q316DJ1bs@cluster0.wqs9js4.mongodb.net/?retryWrites=true&w=majority"
+const uri string = "mongodb+srv://gocha:z7xOvo0Q316DJ1bs@cluster0.wqs9js4.mongodb.net/?retryWrites=true&w=majority"
+
 var recipes *mongo.Collection
 var ctx = context.TODO()
 
@@ -28,14 +28,7 @@ type Recipe struct {
 func init() {
 	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(ctx, clientOptions)
-	if err != nil {
-		panic(err)
-	}
-
-	err = client.Ping(ctx, nil)
-	if err != nil {
-		panic(err)
-	}
+	errMessage(err)
 	recipes = client.Database("recipeFinder").Collection("recipes")
 }
 func saveRecipe(meal Meal, nutrition Nutrition, ingredients string, numberOfRecipes int) {
@@ -50,18 +43,16 @@ func saveRecipe(meal Meal, nutrition Nutrition, ingredients string, numberOfReci
 		MissedIngredients: meal.MissedIngredients,
 		UsedIngredients:   meal.UsedIngredients,
 	}
-	fmt.Println(recipe)
 	_, err := recipes.InsertOne(context.TODO(), recipe)
 	errMessage(err)
 }
 
 func getRecipes(ingredients string, numberOfRecipes int) []*Recipe {
-	filter := bson.D{{"ingredients", ingredients}, {"numberofrecipes", numberOfRecipes}}
+	filter := bson.D{{Key: "ingredients", Value: ingredients}, {Key: "numberofrecipes", Value: numberOfRecipes}}
 	cursor, err := recipes.Find(context.TODO(), filter)
 	errMessage(err)
 	var result []*Recipe
-	if err = cursor.All(context.TODO(), &result); err != nil {
-		panic(err)
-	}
+	err = cursor.All(context.TODO(), &result)
+	errMessage(err)
 	return result
 }
