@@ -8,26 +8,24 @@ import (
 	"recipeFinder/cmd"
 )
 
-var apiKey string = "211df952b8374a47b1a20aa19571620b"
+const apiKey string = "ba78847855ab4d6896c72ae7d7f3da39"
 
 func generateMeals() {
-	ingrediens, numberOfRecipes := cmd.Execute()
-	showRecipes(ingrediens, numberOfRecipes)
+	ingredients, numberOfRecipes := cmd.Execute()
+	showRecipes(ingredients, numberOfRecipes)
+}
+
+type Ingredient struct {
+	Id     int     `json: "id"`
+	Amount float32 `json: "amount"`
+	Name   string  `json: "name"`
 }
 
 type Recipes []struct {
-	Id                int    `json: "id`
-	Title             string `json: "title"`
-	MissedIngredients []struct {
-		Id     int     `json: "id"`
-		Amount float32 `json: "amount"`
-		Name   string  `json: "name"`
-	} `json: "missedIngredients"`
-	UsedIngredients []struct {
-		Id     int     `json: "id"`
-		Amount float32 `json: "amount"`
-		Name   string  `json: "name"`
-	} `json: "usedIngredients"`
+	Id                int          `json: "id`
+	Title             string       `json: "title"`
+	MissedIngredients []Ingredient `json: "missedIngredients"`
+	UsedIngredients   []Ingredient `json: "usedIngredients"`
 }
 
 type Nutrition struct {
@@ -36,14 +34,12 @@ type Nutrition struct {
 	Protein  string `json: "protein"`
 }
 
-func showRecipes(ingrediens string, number int) {
-	url := fmt.Sprintf("https://api.spoonacular.com/recipes/findByIngredients?apiKey=%s&ingredients=%s&number=%d", apiKey, ingrediens, number)
+func showRecipes(ingredients string, number int) {
+	url := fmt.Sprintf("https://api.spoonacular.com/recipes/findByIngredients?apiKey=%s&ingredients=%s&number=%d", apiKey, ingredients, number)
 	responseByte := getData(url)
 	data := Recipes{}
 	err := json.Unmarshal(responseByte, &data)
-	if err != nil {
-		panic(err)
-	}
+	errMessage(err)
 	for _, meal := range data {
 		fmt.Printf("TITLE: %s\n", meal.Title)
 		nutrition := getRecipeNutrition(meal.Id)
@@ -65,21 +61,20 @@ func getRecipeNutrition(recipeId int) Nutrition {
 	responseByte := getData(url)
 	data := Nutrition{}
 	err := json.Unmarshal(responseByte, &data)
-	if err != nil {
-		panic(err)
-	}
+	errMessage(err)
 	return data
 }
 
 func getData(url string) []byte {
 	response, err := http.Get(url)
-	if err != nil {
-		fmt.Println("unable to get data")
-	}
+	errMessage(err)
 
 	responseByte, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		fmt.Println("unable to read the response")
-	}
+	errMessage(err)
 	return responseByte
+}
+func errMessage(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
