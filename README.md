@@ -7,7 +7,7 @@ API for getting meals: [spoonacular food api](https://spoonacular.com/food-api)
 
 packages used in program:
 
-Cobra for making CLI usage: [https://github.com/spf13/cobra](https://github.com/spf13/cobra)
+Cobra for making CLI usage: [https://github.com/spf13/cobra](https://github.com/spf13/cobra)\
 MongoDB for local database : [mongoDB installation](https://pkg.go.dev/go.mongodb.org/mongo-driver#section-readme)
 
 CLI app accepts two params:\
