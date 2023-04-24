@@ -65,8 +65,16 @@ func printOutRecipes(recipes []*Recipe) {
 	}
 }
 
+func getApiRecipesLink(ingredients string, numberOfRecipes int) string {
+	return fmt.Sprintf("https://api.spoonacular.com/recipes/findByIngredients?apiKey=%s&ingredients=%s&number=%d", apiKey, ingredients, numberOfRecipes)
+}
+
+func getApiNutritionLink(recipeId int) string {
+	return fmt.Sprintf("https://api.spoonacular.com/recipes/%d/nutritionWidget.json?apiKey=%s", recipeId, apiKey)
+}
+
 func showFromAPI(ingredients string, numberOfRecipes int) {
-	url := fmt.Sprintf("https://api.spoonacular.com/recipes/findByIngredients?apiKey=%s&ingredients=%s&number=%d", apiKey, ingredients, numberOfRecipes)
+	url := getApiRecipesLink(ingredients, numberOfRecipes)
 	responseByte := getData(url)
 	data := Recipes{}
 	err := json.Unmarshal(responseByte, &data)
@@ -79,7 +87,7 @@ func showFromAPI(ingredients string, numberOfRecipes int) {
 	printOutRecipes(recipes)
 }
 func getRecipeNutrition(recipeId int) Nutrition {
-	url := fmt.Sprintf("https://api.spoonacular.com/recipes/%d/nutritionWidget.json?apiKey=%s", recipeId, apiKey)
+	url := getApiNutritionLink(recipeId)
 	responseByte := getData(url)
 	data := Nutrition{}
 	err := json.Unmarshal(responseByte, &data)
