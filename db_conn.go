@@ -55,5 +55,13 @@ func getRecipes(ingredients string, numberOfRecipes int) []*Recipe {
 	var result []*Recipe
 	err = cursor.All(context.TODO(), &result)
 	errMessage(err)
+	if len(result) == 0 {
+		filter = bson.D{{Key: "ingredients", Value: ingredients}, {Key: "numberofrecipes", Value: bson.D{{"$gt", numberOfRecipes}}}}
+		cursor, err := recipes.Find(context.TODO(), filter)
+		errMessage(err)
+		err = cursor.All(context.TODO(), &result)
+		errMessage(err)
+		return result[:numberOfRecipes]
+	}
 	return result
 }
