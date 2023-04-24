@@ -31,7 +31,7 @@ func init() {
 	errMessage(err)
 	recipes = client.Database("recipeFinder").Collection("recipes")
 }
-func saveRecipe(meal Meal, nutrition Nutrition, ingredients string, numberOfRecipes int) {
+func saveRecipe(meal Meal, nutrition Nutrition, ingredients string, numberOfRecipes int) *Recipe {
 	recipe := &Recipe{
 		ID:                meal.Id,
 		Title:             meal.Title,
@@ -45,6 +45,7 @@ func saveRecipe(meal Meal, nutrition Nutrition, ingredients string, numberOfReci
 	}
 	_, err := recipes.InsertOne(context.TODO(), recipe)
 	errMessage(err)
+	return recipe
 }
 
 func getRecipes(ingredients string, numberOfRecipes int) []*Recipe {

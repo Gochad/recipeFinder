@@ -10,11 +10,6 @@ import (
 
 const apiKey string = "ba78847855ab4d6896c72ae7d7f3da39"
 
-func generateMeals() {
-	ingredients, numberOfRecipes := cmd.Execute()
-	showRecipes(ingredients, numberOfRecipes)
-}
-
 type Ingredient struct {
 	Id     int     `json: "id"`
 	Amount float32 `json: "amount"`
@@ -40,16 +35,21 @@ type Nutrition struct {
 	Protein  string `json: "protein"`
 }
 
+func generateMeals() {
+	ingredients, numberOfRecipes := cmd.Execute()
+	showRecipes(ingredients, numberOfRecipes)
+}
+
 func showRecipes(ingredients string, numberOfRecipes int) {
 	recipes := getRecipes(ingredients, numberOfRecipes)
 	if len(recipes) == 0 {
 		showFromAPI(ingredients, numberOfRecipes)
 	} else {
-		showFromDB(recipes)
+		printOutRecipes(recipes)
 	}
 }
 
-func showFromDB(recipes []*Recipe) {
+func printOutRecipes(recipes []*Recipe) {
 	for _, meal := range recipes {
 		fmt.Printf("TITLE: %s\n", meal.Title)
 		fmt.Printf("NUTRITION: Calories: %s\t Carbs: %s\t Protein: %s\n", meal.Calories, meal.Carbs, meal.Protein)
@@ -71,21 +71,12 @@ func showFromAPI(ingredients string, numberOfRecipes int) {
 	data := Recipes{}
 	err := json.Unmarshal(responseByte, &data)
 	errMessage(err)
+	var recipes []*Recipe
 	for _, meal := range data {
-		fmt.Printf("TITLE: %s\n", meal.Title)
 		nutrition := getRecipeNutrition(meal.Id)
-		saveRecipe(meal, nutrition, ingredients, numberOfRecipes)
-		fmt.Printf("NUTRITION: Calories: %s\t Carbs: %s\t Protein: %s\n", nutrition.Calories, nutrition.Carbs, nutrition.Protein)
-		fmt.Printf("MISSED INGREDIENTS: \n")
-		for _, ingredient := range meal.MissedIngredients {
-			fmt.Printf("id: %d  amount: %g  name: %s \n", ingredient.Id, ingredient.Amount, ingredient.Name)
-		}
-		fmt.Printf("USED INGREDIENTS: \n")
-		for _, ingredient := range meal.UsedIngredients {
-			fmt.Printf("id: %d  amount: %g  name: %s \n", ingredient.Id, ingredient.Amount, ingredient.Name)
-		}
-		fmt.Println("--------------------------------------------------------------------------------------------")
+		recipes = append(recipes, saveRecipe(meal, nutrition, ingredients, numberOfRecipes))
 	}
+	printOutRecipes(recipes)
 }
 func getRecipeNutrition(recipeId int) Nutrition {
 	url := fmt.Sprintf("https://api.spoonacular.com/recipes/%d/nutritionWidget.json?apiKey=%s", recipeId, apiKey)

@@ -20,9 +20,7 @@ var rootCmd = &cobra.Command{
 	An example call of this CLI app:
 	'./recipeFinder --ingredients=tomatoes,eggs,pasta --numberOfRecipes=5'
 	`,
-	Run: func(cmd *cobra.Command, args []string) {
-
-	},
+	Run: func(cmd *cobra.Command, args []string) {},
 }
 
 func Execute() (string, int) {
