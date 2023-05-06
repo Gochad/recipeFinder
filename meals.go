@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -41,11 +42,15 @@ func generateMeals() {
 }
 
 func showRecipes(ingredients string, numberOfRecipes int) {
-	recipes := getRecipes(ingredients, numberOfRecipes)
-	if len(recipes) == 0 {
-		showFromAPI(ingredients, numberOfRecipes)
+	if numberOfRecipes > 0 {
+		recipes := getRecipes(ingredients, numberOfRecipes)
+		if len(recipes) == 0 {
+			showFromAPI(ingredients, numberOfRecipes)
+		} else {
+			printOutRecipes(recipes)
+		}
 	} else {
-		printOutRecipes(recipes)
+		errMessage(errors.New("numberOfRecipes must be > 0"))
 	}
 }
 

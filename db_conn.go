@@ -61,7 +61,11 @@ func getRecipes(ingredients string, numberOfRecipes int) []*Recipe {
 		errMessage(err)
 		err = cursor.All(context.TODO(), &result)
 		errMessage(err)
-		return result[:numberOfRecipes]
+		if len(result) > 0 {
+			return result[:numberOfRecipes]
+		}
+		return []*Recipe{}
+
 	}
 	return result
 }

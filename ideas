@@ -1,0 +1,16 @@
+Analyzed Recipe - cały przepis step by step po prostu
+random recipe - randomowy przepis daje
+taste widget - daje informacje o przepisie - ile ma smaku danego
+Extract Recipe from Website - robi konwersje ze strony do json
+products search by sth - szukanie produktów po cechach np. kaloriach, tłuszczach etc
+
+generowanie przepisów i edycja ich:
+Get Meal Plan Week
+Get Meal Plan Day
+Generate Meal Plan
+Add to Meal Plan
+Clear Meal Plan Day
+Delete from Meal Plan
+
+wine recomendation
+get by Cuisine
