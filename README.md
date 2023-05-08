@@ -16,4 +16,12 @@ CLI app accepts two params:\
 `--numberOfRecipes`, which will let the user specify the maximum number of recipes they'd like to get \
 (eg. `--numberOfRecipes=5`)
 
-Example call after building: `./recipeFinder --ingredients=tomatoes,eggs,pasta --numberOfRecipes=5`
+## Install
+1. clone repo
+2. make sure you have installed go
+3. in terminal, run `go get go.mongodb.org/mongo-driver/mongo`
+4. next import command: `go get -u github.com/spf13/cobra@latest`
+5. `go build`
+6. Example call after building: `./recipeFinder --ingredients=tomatoes,eggs,pasta --numberOfRecipes=5`
+
+If you want to install cli on your mongodb - you can edit variable `uri` in file `db_conn.db`

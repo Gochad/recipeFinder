@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,15 +13,15 @@ var recipes *mongo.Collection
 var ctx = context.TODO()
 
 type Recipe struct {
-	ID                int          `json: "_id"`
-	Title             string       `json: "title"`
-	Calories          string       `json: "calories"`
-	Carbs             string       `json: "carbs"`
-	Protein           string       `json: "protein"`
-	Ingredients       string       `json: "ingredients"`
-	NumberOfRecipes   int          `json: "numberOfRecipes"`
-	MissedIngredients []Ingredient `json: "missedIngredients"`
-	UsedIngredients   []Ingredient `json: "usedIngredients"`
+	ID                int          `json:"_id"`
+	Title             string       `json:"title"`
+	Calories          string       `json:"calories"`
+	Carbs             string       `json:"carbs"`
+	Protein           string       `json:"protein"`
+	Ingredients       string       `json:"ingredients"`
+	NumberOfRecipes   int          `json:"numberOfRecipes"`
+	MissedIngredients []Ingredient `json:"missedIngredients"`
+	UsedIngredients   []Ingredient `json:"usedIngredients"`
 }
 
 func init() {

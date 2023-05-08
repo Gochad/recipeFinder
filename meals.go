@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -49,8 +48,6 @@ func showRecipes(ingredients string, numberOfRecipes int) {
 		} else {
 			printOutRecipes(recipes)
 		}
-	} else {
-		errMessage(errors.New("numberOfRecipes must be > 0"))
 	}
 }
 
